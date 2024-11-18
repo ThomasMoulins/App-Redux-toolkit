@@ -1,10 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Meals = ({ selectedCategory }) => {
-  const [meals, setMeals] = useState([]);
+const Meals = ({ selectedCategory, meals }) => {
+  const [categoryMeals, setCategoryMeals] = useState([]);
 
-  // Récupérer les repas de la catégorie choisie
   useEffect(() => {
     const fetchMeals = async () => {
       if (selectedCategory) {
@@ -12,20 +11,23 @@ const Meals = ({ selectedCategory }) => {
           const response = await axios.get(
             `https://www.themealdb.com/api/json/v1/1/filter.php?c=${selectedCategory}`
           );
-          setMeals(response.data.meals);
+          setCategoryMeals(response.data.meals);
         } catch (error) {
           console.error("Erreur lors de la récupération des repas :", error);
         }
       }
     };
 
-    fetchMeals();
-  }, [selectedCategory]);
+    if (!meals) {
+      fetchMeals();
+    }
+  }, [selectedCategory, meals]);
+  const displayMeals = meals || categoryMeals; // Affiche les repas de recherche ou de catégorie
 
   return (
     <main className="max-w-7xl mx-auto p-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {meals.map((meal) => (
+        {displayMeals.map((meal) => (
           <div
             key={meal.idMeal}
             className="border rounded-lg p-4 shadow-md bg-white"
