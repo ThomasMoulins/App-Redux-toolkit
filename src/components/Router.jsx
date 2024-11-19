@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 // Éléments/pages
 import Navbar from "./Navbar";
 import Home from "./Home/Home";
-import Recipe from "./Recipe";
+import Recipe from "./Recipe/Recipe";
 import Checklist from "./Checklist";
 import Planning from "./Planning";
 
