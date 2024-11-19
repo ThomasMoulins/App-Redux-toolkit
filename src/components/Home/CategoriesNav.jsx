@@ -26,21 +26,23 @@ const CategoriesNav = ({ selectedCategory, setSelectedCategory }) => {
   }, []);
 
   return (
-    <nav className="text-white">
-      <div className="max-w-7xl mx-auto bg-gray-800 rounded-xl flex items-center justify-center h-16 space-x-4">
-        {categories.map((category) => (
-          <button
-            key={category.idCategory}
-            onClick={() => setSelectedCategory(category.strCategory)}
-            className={`px-3 py-2 rounded-md text-sm font-medium ${
-              selectedCategory === category.strCategory
-                ? "bg-blue-500 text-white" // Catégorie sélectionnée
-                : "hover:bg-gray-700 text-gray-300" // Catégories non sélectionnées
-            }`}
-          >
-            {category.strCategory}
-          </button>
-        ))}
+    <nav className="text-white p-4">
+      <div className="max-w-7xl mx-auto bg-gray-800 rounded-xl flex items-center justify-center h-40 lg:h-16 px-4">
+        <div className="flex flex-wrap space-x-4">
+          {categories.map((category) => (
+            <button
+              key={category.idCategory}
+              onClick={() => setSelectedCategory(category.strCategory)}
+              className={`px-3 py-2 rounded-md text-sm font-medium ${
+                selectedCategory === category.strCategory
+                  ? "bg-blue-500 text-white" // Catégorie sélectionnée
+                  : "hover:bg-gray-700 text-gray-300" // Catégories non sélectionnées
+              }`}
+            >
+              {category.strCategory}
+            </button>
+          ))}
+        </div>
       </div>
     </nav>
   );
