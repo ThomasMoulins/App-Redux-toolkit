@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { FaPlus } from "react-icons/fa";
-import { MdOutlineAddShoppingCart } from "react-icons/md";
+import { FaCartArrowDown } from "react-icons/fa6";
+import { FaCalendarPlus } from "react-icons/fa6";
 import Modal from "./Modal";
 import useToggle from "./useToggle";
 
@@ -26,15 +27,15 @@ const Mealsbutton = ({ meal }) => {
       <div className="mt-auto flex">
         <button
           onClick={() => handleOpenModal(meal)}
-          className="h-10 px-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
+          className="h-10 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 flex items-center justify-center"
         >
-          Ajouter au calendrier
+          <FaCalendarPlus />
         </button>
         <Link
           to={``}
           className="h-10 px-4 ms-auto bg-green-500 text-white rounded-md hover:bg-green-600 flex items-center justify-center"
         >
-          <MdOutlineAddShoppingCart />
+          <FaCartArrowDown />
         </Link>
       </div>
       {isModalOpen && <Modal onClose={toggleModal} meal={selectedMeal} />}
