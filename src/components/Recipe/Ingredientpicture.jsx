@@ -1,5 +1,5 @@
 const Ingredientpicture = ({ meal }) => {
-  Array.from({ length: 20 }, (_, i) => i + 1).map((index) => {
+  return Array.from({ length: 20 }, (_, i) => i + 1).map((index) => {
     const ingredient = meal[`strIngredient${index}`];
     const measure = meal[`strMeasure${index}`];
 
