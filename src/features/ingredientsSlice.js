@@ -58,9 +58,22 @@ const ingredientsSlice = createSlice({
           ingredient.unit !== action.payload.unit
       );
     },
+    updateIngredientDate(state, action) {
+      const { name, unit, newDate } = action.payload;
+      const ingredient = state.find(
+        (ing) => ing.name === name && ing.unit === unit
+      );
+      if (ingredient) {
+        ingredient.consumptionDate = newDate;
+      }
+    },
   },
 });
 
-export const { addIngredients, updateIngredient, removeIngredient } =
-  ingredientsSlice.actions;
+export const {
+  addIngredients,
+  updateIngredient,
+  removeIngredient,
+  updateIngredientDate,
+} = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;
