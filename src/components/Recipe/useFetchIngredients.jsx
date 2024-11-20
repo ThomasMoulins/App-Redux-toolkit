@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const FetchIngredients = (id) => {
+const useFetchIngredients = (id) => {
   const [meal, setMeal] = useState(null);
 
   useEffect(() => {
@@ -32,4 +32,4 @@ const FetchIngredients = (id) => {
   return meal;
 };
 
-export default FetchIngredients;
+export default useFetchIngredients;

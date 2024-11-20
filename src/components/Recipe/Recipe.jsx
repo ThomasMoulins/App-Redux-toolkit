@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import FetchIngredients from "./FetchIngredients";
+import FetchIngredients from "./useFetchIngredients";
 import Ingredientpicture from "./Ingredientpicture";
 
 const Recipe = () => {

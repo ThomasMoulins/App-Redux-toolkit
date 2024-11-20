@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./Navbar";
 import Home from "./Home/Home";
 import Recipe from "./Recipe/Recipe";
-import Checklist from "./Checklist";
+import ShoppingList from "./ShoppingList";
 import Planning from "./Planning";
 
 const Router = () => {
@@ -15,7 +15,7 @@ const Router = () => {
         {/* PUBLIC ROUTES */}
         <Route path="/" element={<Home />} />
         <Route path="/recipe/:id" element={<Recipe />} />
-        <Route path="/checklist" element={<Checklist />} />
+        <Route path="/shopping-list" element={<ShoppingList />} />
         <Route path="/planning" element={<Planning />} />
       </Routes>
     </BrowserRouter>

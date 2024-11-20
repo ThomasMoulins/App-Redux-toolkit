@@ -14,7 +14,7 @@ const Navbar = () => {
               Accueil
             </Link>
             <Link
-              to="Checklist"
+              to="shopping-list"
               className="px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700 hover:text-white"
             >
               Liste de courses
