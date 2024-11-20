@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = {
-  ingredients: [],
-};
+const initialState = [];
 
 const ingredientsSlice = createSlice({
   name: "ingredients",
@@ -12,7 +10,7 @@ const ingredientsSlice = createSlice({
       const newIngredients = action.payload;
       newIngredients.forEach((newIngredient) => {
         // Trouver un ingrédient existant avec le même nom et la même unité
-        const existingIngredient = state.ingredients.find(
+        const existingIngredient = state.find(
           (ingredient) =>
             ingredient.name === newIngredient.name &&
             ingredient.unit === newIngredient.unit
@@ -36,7 +34,7 @@ const ingredientsSlice = createSlice({
           }
         } else {
           // Ajouter le nouvel ingrédient
-          state.ingredients.push({
+          state.push({
             ...newIngredient,
             recipeIds: [newIngredient.recipeId],
             recipeNames: [newIngredient.recipeName],
@@ -46,7 +44,7 @@ const ingredientsSlice = createSlice({
     },
     updateIngredient(state, action) {
       const { name, unit, updates } = action.payload;
-      const ingredient = state.ingredients.find(
+      const ingredient = state.find(
         (ing) => ing.name === name && ing.unit === unit
       );
       if (ingredient) {
@@ -54,7 +52,7 @@ const ingredientsSlice = createSlice({
       }
     },
     removeIngredient(state, action) {
-      state.ingredients = state.ingredients.filter(
+      return state.filter(
         (ingredient) =>
           ingredient.name !== action.payload.name ||
           ingredient.unit !== action.payload.unit

@@ -6,7 +6,7 @@ import {
 
 const ShoppingList = () => {
   const dispatch = useDispatch();
-  const ingredients = useSelector((state) => state.ingredients.ingredients);
+  const ingredients = useSelector((state) => state.ingredients);
 
   // Trier les ingrédients par date de consommation croissante
   const sortedIngredients = [...ingredients].sort(
