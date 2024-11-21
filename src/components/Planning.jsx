@@ -3,19 +3,23 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import { useDispatch, useSelector } from "react-redux";
-import { updateIngredientDate } from "../features/ingredientsSlice";
+import { removeRecipe, updateRecipeDate } from "../features/recipesSlice";
+import {
+  removeIngredientsByRecipeId,
+  updateIngredientsDateByRecipeId,
+} from "../features/ingredientsSlice";
 
 const Planning = () => {
-  const ingredients = useSelector((state) => state.ingredients);
+  const recipes = useSelector((state) => state.recipes);
   const dispatch = useDispatch();
 
-  const events = ingredients.map((ingredient) => {
+  const events = recipes.map((recipe) => {
     return {
-      title: `${ingredient.name} (${ingredient.quantity} ${ingredient.unit})`,
-      start: ingredient.consumptionDate,
+      title: recipe.name,
+      start: recipe.consumptionDate,
       extendedProps: {
-        ingredientName: ingredient.name,
-        unit: ingredient.unit,
+        recipeId: recipe.id,
+        consumptionDate: recipe.consumptionDate,
       },
     };
   });
@@ -28,18 +32,39 @@ const Planning = () => {
     );
   };
 
+  const handleEventClick = (info) => {
+    if (
+      window.confirm(
+        `Voulez-vous supprimer la recette "${info.event.title}" du planning ?`
+      )
+    ) {
+      const recipeId = info.event.extendedProps.recipeId;
+      const consumptionDate = info.event.extendedProps.consumptionDate;
+
+      dispatch(removeRecipe({ id: recipeId, consumptionDate }));
+      dispatch(removeIngredientsByRecipeId({ recipeId, consumptionDate }));
+    }
+  };
+
   const handleEventDrop = (info) => {
     const { event } = info;
-    // Récupére les propriétés définies dans l'événement
-    const ingredientName = event.extendedProps.ingredientName;
-    const unit = event.extendedProps.unit;
-    const newDate = event.startStr; // Format ISO string
+    const recipeId = event.extendedProps.recipeId;
+    const oldDate = event.extendedProps.consumptionDate;
+    const newDate = event.startStr;
 
     dispatch(
-      updateIngredientDate({
-        name: ingredientName,
-        unit: unit,
-        newDate: newDate,
+      updateRecipeDate({
+        id: recipeId,
+        oldDate,
+        newDate,
+      })
+    );
+
+    dispatch(
+      updateIngredientsDateByRecipeId({
+        recipeId,
+        oldDate,
+        newDate,
       })
     );
   };
@@ -52,6 +77,7 @@ const Planning = () => {
         initialView="dayGridMonth"
         locale={frLocale}
         events={events}
+        eventClick={handleEventClick}
         eventDrop={handleEventDrop}
         eventContent={renderEventContent}
         headerToolbar={{

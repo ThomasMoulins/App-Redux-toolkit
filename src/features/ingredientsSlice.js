@@ -58,14 +58,26 @@ const ingredientsSlice = createSlice({
           ingredient.unit !== action.payload.unit
       );
     },
-    updateIngredientDate(state, action) {
-      const { name, unit, newDate } = action.payload;
-      const ingredient = state.find(
-        (ing) => ing.name === name && ing.unit === unit
+    removeIngredientsByRecipeId(state, action) {
+      const { recipeId, consumptionDate } = action.payload;
+      return state.filter(
+        (ingredient) =>
+          !(
+            ingredient.recipeId === recipeId &&
+            ingredient.consumptionDate === consumptionDate
+          )
       );
-      if (ingredient) {
-        ingredient.consumptionDate = newDate;
-      }
+    },
+    updateIngredientsDateByRecipeId(state, action) {
+      const { recipeId, oldDate, newDate } = action.payload;
+      state.forEach((ingredient) => {
+        if (
+          ingredient.recipeId === recipeId &&
+          ingredient.consumptionDate === oldDate
+        ) {
+          ingredient.consumptionDate = newDate;
+        }
+      });
     },
   },
 });
@@ -74,6 +86,7 @@ export const {
   addIngredients,
   updateIngredient,
   removeIngredient,
-  updateIngredientDate,
+  removeIngredientsByRecipeId,
+  updateIngredientsDateByRecipeId,
 } = ingredientsSlice.actions;
 export default ingredientsSlice.reducer;

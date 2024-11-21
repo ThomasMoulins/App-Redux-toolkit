@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addIngredients } from "../../features/ingredientsSlice";
+import { addRecipe } from "../../features/recipesSlice";
 import useFetchIngredients from "../Recipe/useFetchIngredients";
 import { parseMeasure } from "./parseMeasure";
 import Ingredientpicture from "../Recipe/Ingredientpicture";
@@ -50,6 +51,13 @@ const Modal = ({ onClose, meal }) => {
         });
       }
     }
+    dispatch(
+      addRecipe({
+        id: meal.idMeal,
+        name: meal.strMeal,
+        consumptionDate,
+      })
+    );
     dispatch(addIngredients(ingredients));
     onClose();
   };
