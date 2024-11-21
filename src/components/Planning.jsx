@@ -59,14 +59,6 @@ const Planning = () => {
         newDate,
       })
     );
-
-    dispatch(
-      updateIngredientsDateByRecipeId({
-        recipeId,
-        oldDate,
-        newDate,
-      })
-    );
   };
 
   return (
