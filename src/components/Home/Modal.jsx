@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addIngredients } from "../../features/ingredientsSlice";
-import { addRecipe } from "../../features/recipesSlice";
+import { addRecipeWithIngredients } from "../../app/middlewares/thunks/addRecipeThunk";
 import useFetchIngredients from "../Recipe/useFetchIngredients";
 import { parseMeasure } from "./parseMeasure";
 import Ingredientpicture from "../Recipe/Ingredientpicture";
@@ -51,14 +50,18 @@ const Modal = ({ onClose, meal }) => {
         });
       }
     }
-    dispatch(
-      addRecipe({
+    // Préparer les données pour le thunk
+    const recipeData = {
+      recipe: {
         id: meal.idMeal,
         name: meal.strMeal,
         consumptionDate,
-      })
-    );
-    dispatch(addIngredients(ingredients));
+      },
+      ingredients,
+    };
+
+    // Dispatch le thunk pour ajouter la recette et les ingrédients
+    dispatch(addRecipeWithIngredients(recipeData));
     onClose();
   };
 
