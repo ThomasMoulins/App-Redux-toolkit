@@ -43,38 +43,30 @@ const ingredientsSlice = createSlice({
       });
     },
     updateIngredient(state, action) {
-      const { name, unit, updates } = action.payload;
+      const { name, unit, recipeId, updates } = action.payload;
       const ingredient = state.find(
-        (ing) => ing.name === name && ing.unit === unit
+        (ing) =>
+          ing.name === name && ing.unit === unit && ing.recipeId === recipeId
       );
       if (ingredient) {
         Object.assign(ingredient, updates);
       }
     },
     removeIngredient(state, action) {
+      const { name, unit } = action.payload;
       return state.filter(
-        (ingredient) =>
-          ingredient.name !== action.payload.name ||
-          ingredient.unit !== action.payload.unit
+        (ingredient) => ingredient.name !== name || ingredient.unit !== unit
       );
     },
     removeIngredientsByRecipeId(state, action) {
-      const { recipeId, consumptionDate } = action.payload;
       return state.filter(
-        (ingredient) =>
-          !(
-            ingredient.recipeId === recipeId &&
-            ingredient.consumptionDate === consumptionDate
-          )
+        (ingredient) => ingredient.recipeId !== action.payload.recipeId
       );
     },
     updateIngredientsDateByRecipeId(state, action) {
-      const { recipeId, oldDate, newDate } = action.payload;
+      const { recipeId, newDate } = action.payload;
       state.forEach((ingredient) => {
-        if (
-          ingredient.recipeId === recipeId &&
-          ingredient.consumptionDate === oldDate
-        ) {
+        if (ingredient.recipeId === recipeId) {
           ingredient.consumptionDate = newDate;
         }
       });

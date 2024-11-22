@@ -13,8 +13,8 @@ const ShoppingList = () => {
     (a, b) => new Date(a.consumptionDate) - new Date(b.consumptionDate)
   );
 
-  const handleUpdate = (name, unit, updates) => {
-    dispatch(updateIngredient({ name, unit, updates }));
+  const handleUpdate = (name, unit, recipeId, updates) => {
+    dispatch(updateIngredient({ name, unit, recipeId, updates }));
   };
 
   const handleRemove = (name, unit) => {
@@ -32,7 +32,7 @@ const ShoppingList = () => {
         <div className="grid grid-cols-3 md:grid-cols-6 gap-2 my-10">
           {sortedIngredients.map((ingredient) => (
             <div
-              key={ingredient.name}
+              key={`${ingredient.name}-${ingredient.unit}-${ingredient.recipeId}`}
               className="flex flex-col items-center text-center mb-10"
             >
               <img
@@ -44,24 +44,29 @@ const ShoppingList = () => {
               <div className="flex align-middle items-center">
                 <button
                   onClick={() =>
-                    handleUpdate(ingredient.name, ingredient.unit, {
-                      quantity: parseFloat(ingredient.quantity - 1),
-                    })
+                    handleUpdate(
+                      ingredient.name,
+                      ingredient.unit,
+                      ingredient.recipeId,
+                      { quantity: parseFloat(ingredient.quantity - 1) }
+                    )
                   }
                   className="ms-2 px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                   disabled={ingredient.quantity <= 1}
                 >
                   -
                 </button>
-
                 <p className="mx-2 text-sm text-gray-600">
                   {ingredient.quantity} {ingredient.unit}
                 </p>
                 <button
                   onClick={() =>
-                    handleUpdate(ingredient.name, ingredient.unit, {
-                      quantity: parseFloat(ingredient.quantity + 1),
-                    })
+                    handleUpdate(
+                      ingredient.name,
+                      ingredient.unit,
+                      ingredient.recipeId,
+                      { quantity: parseFloat(ingredient.quantity + 1) }
+                    )
                   }
                   className="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600"
                 >
@@ -72,9 +77,12 @@ const ShoppingList = () => {
                 type="date"
                 value={ingredient.consumptionDate}
                 onChange={(e) =>
-                  handleUpdate(ingredient.name, ingredient.unit, {
-                    consumptionDate: e.target.value,
-                  })
+                  handleUpdate(
+                    ingredient.name,
+                    ingredient.unit,
+                    ingredient.recipeId,
+                    { consumptionDate: e.target.value }
+                  )
                 }
                 className="p-1 my-2 border rounded"
               />

@@ -4,10 +4,6 @@ import interactionPlugin from "@fullcalendar/interaction";
 import frLocale from "@fullcalendar/core/locales/fr";
 import { useDispatch, useSelector } from "react-redux";
 import { removeRecipe, updateRecipeDate } from "../features/recipesSlice";
-import {
-  removeIngredientsByRecipeId,
-  updateIngredientsDateByRecipeId,
-} from "../features/ingredientsSlice";
 
 const Planning = () => {
   const recipes = useSelector((state) => state.recipes);
@@ -42,7 +38,6 @@ const Planning = () => {
       const consumptionDate = info.event.extendedProps.consumptionDate;
 
       dispatch(removeRecipe({ id: recipeId, consumptionDate }));
-      dispatch(removeIngredientsByRecipeId({ recipeId, consumptionDate }));
     }
   };
 
