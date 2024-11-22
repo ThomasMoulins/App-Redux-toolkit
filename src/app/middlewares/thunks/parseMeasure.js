@@ -1,9 +1,7 @@
-// utils/parseMeasure.js
-
-export const parseMeasure = (measure) => {
+const parseMeasure = (measure) => {
   if (!measure) return { quantity: 1, unit: "" };
 
-  // Supprimer les espaces inutiles
+  // Supprime les espaces inutiles
   measure = measure.trim();
 
   // Expression régulière pour capturer les fractions (par exemple, "1/2")
@@ -23,7 +21,7 @@ export const parseMeasure = (measure) => {
     quantity = numerator / denominator;
     unit = measure.replace(matches[0], "").trim();
   }
-  // Vérifier si la mesure commence par un nombre (entier ou décimal)
+  // Vérifie si la mesure commence par un nombre (entier ou décimal)
   else if (numberRegex.test(measure)) {
     const matches = measure.match(numberRegex);
     quantity = parseFloat(matches[0]);
@@ -36,3 +34,5 @@ export const parseMeasure = (measure) => {
 
   return { quantity, unit };
 };
+
+export default parseMeasure;

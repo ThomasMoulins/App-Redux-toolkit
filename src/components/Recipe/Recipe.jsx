@@ -1,16 +1,28 @@
 import { useParams } from "react-router-dom";
-import FetchIngredients from "./useFetchIngredients";
+import { useGetRecipeByIdQuery } from "../../app/apiSlice";
 import Ingredientpicture from "./Ingredientpicture";
 
 const Recipe = () => {
   const { id } = useParams(); // Récupère l'ID depuis les paramètres de l'URL
-  const meal = FetchIngredients(id);
 
-  if (!meal) {
+  const { data, error, isLoading } = useGetRecipeByIdQuery(id);
+
+  if (isLoading) {
     return (
       <p className="text-center text-gray-500">Chargement des détails...</p>
     );
   }
+
+  if (error || !data || !data.meals) {
+    return (
+      <p className="text-center text-red-500">
+        Erreur :{" "}
+        {error?.message || "Impossible de charger les détails du repas."}
+      </p>
+    );
+  }
+
+  const meal = data.meals[0];
 
   return (
     <div className="max-w-screen-2xl mx-auto p-4">

@@ -72,7 +72,7 @@ const ShoppingList = () => {
                 type="date"
                 value={ingredient.consumptionDate}
                 onChange={(e) =>
-                  handleUpdate(ingredient.name, {
+                  handleUpdate(ingredient.name, ingredient.unit, {
                     consumptionDate: e.target.value,
                   })
                 }

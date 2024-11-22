@@ -1,25 +1,44 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useGetRecipeByIdQuery } from "../../app/apiSlice";
 import { addRecipeWithIngredients } from "../../app/middlewares/thunks/addRecipeThunk";
-import useFetchIngredients from "../Recipe/useFetchIngredients";
-import { parseMeasure } from "./parseMeasure";
 import Ingredientpicture from "../Recipe/Ingredientpicture";
 
 const Modal = ({ onClose, meal }) => {
   const dispatch = useDispatch();
   const [consumptionDate, setConsumptionDate] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const mealDetails = useFetchIngredients(meal.idMeal);
 
-  if (mealDetails === null) {
-    return <p>Chargement...</p>;
-  } else if (mealDetails === undefined) {
+  const { data, error, isLoading } = useGetRecipeByIdQuery(meal.idMeal);
+
+  if (isLoading) {
     return (
-      <p className="text-center text-red-500">
-        Erreur lors du chargement des détails du repas.
-      </p>
+      <div className="fixed inset-0 bg-black bg-opacity-55 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg p-6">
+          <p>Chargement...</p>
+        </div>
+      </div>
+    );
+  } else if (error) {
+    console.log(error);
+    return (
+      <div className="fixed inset-0 bg-black bg-opacity-55 flex justify-center items-center z-50">
+        <div className="bg-white rounded-lg p-6">
+          <p className="text-center text-red-500">
+            Erreur lors du chargement des détails du repas.
+          </p>
+          <button
+            onClick={onClose}
+            className="mt-4 px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600"
+          >
+            Fermer
+          </button>
+        </div>
+      </div>
     );
   }
+
+  const mealDetails = data.meals[0];
 
   const handleAddToCalendar = () => {
     if (!consumptionDate) {
@@ -29,40 +48,20 @@ const Modal = ({ onClose, meal }) => {
       return;
     }
     setErrorMessage("");
-    const ingredients = [];
-
-    // Récupérer les ingrédients et mesures
-    for (let i = 1; i <= 20; i++) {
-      const ingredientName = mealDetails[`strIngredient${i}`];
-      const measure = mealDetails[`strMeasure${i}`];
-
-      if (ingredientName && ingredientName.trim() !== "") {
-        // Utiliser la fonction parseMeasure pour extraire quantité et unité
-        const { quantity, unit } = parseMeasure(measure);
-
-        ingredients.push({
-          name: ingredientName.trim(),
-          quantity,
-          unit,
-          consumptionDate,
-          recipeId: meal.idMeal,
-          recipeName: meal.strMeal,
-        });
-      }
-    }
-    // Préparer les données pour le thunk
     const recipeData = {
-      recipe: {
-        id: meal.idMeal,
-        name: meal.strMeal,
-        consumptionDate,
-      },
-      ingredients,
+      mealId: meal.idMeal,
+      consumptionDate,
     };
 
     // Dispatch le thunk pour ajouter la recette et les ingrédients
-    dispatch(addRecipeWithIngredients(recipeData));
-    onClose();
+    dispatch(addRecipeWithIngredients(recipeData))
+      .unwrap()
+      .then(() => {
+        onClose();
+      })
+      .catch((error) => {
+        setErrorMessage(error || "Erreur inconnue lors de l'ajout.");
+      });
   };
 
   return (

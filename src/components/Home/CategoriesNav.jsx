@@ -1,29 +1,26 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import { useGetCategoriesQuery } from "../../app/apiSlice";
 
 const CategoriesNav = ({ selectedCategory, setSelectedCategory }) => {
-  const [categories, setCategories] = useState([]);
+  const { data, error, isLoading } = useGetCategoriesQuery();
 
-  // Récupère les catégories depuis l'API
+  // Sélectionne la première catégorie par défaut
   useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const response = await axios.get(
-          "https://www.themealdb.com/api/json/v1/1/categories.php"
-        );
-        setCategories(response.data.categories);
+    if (data && data.categories && data.categories.length > 0) {
+      setSelectedCategory(data.categories[0].strCategory);
+    }
+  }, [data, setSelectedCategory]);
 
-        // Sélectionner la première catégorie par défaut
-        if (response.data.categories.length > 0) {
-          setSelectedCategory(response.data.categories[0].strCategory);
-        }
-      } catch (error) {
-        console.error("Erreur lors de la récupération des catégories :", error);
-      }
-    };
+  if (isLoading) {
+    return <p>Chargement des catégories...</p>;
+  }
 
-    fetchCategories();
-  }, []);
+  if (error) {
+    console.error("Erreur lors de la récupération des catégories :", error);
+    return <p>Erreur lors de la récupération des catégories.</p>;
+  }
+
+  const categories = data.categories;
 
   return (
     <nav className="text-white p-4">
